@@ -13,10 +13,6 @@ namespace PetAdoption.Application.Interfaces.InfrastructureInterfaces
 
         Task DeletePetAsync(int id);
 
-        Task DeletePetPhotoAsync(int id);
-
-        Task SavePetPhotosAsync(List<PetPhoto> entities);
-
         Task<Pet> GetAsync(Expression<Func<Pet, bool>> predicate);
     }
 }

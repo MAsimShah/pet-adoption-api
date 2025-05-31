@@ -3,26 +3,24 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PetAdoption.Api.Controllers
 {
-    public record PetFilesUploadRequest(int PetId, List<string> Images);
-
-    public record Base64ImageFile(string FileName, string Base64Data);
-    public record Base64UploadRequest(int PetId, List<Base64ImageFile> Images);
-
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize] // 👈 Require authentication for all endpoints
+    // [Authorize] // 👈 Require authentication for all endpoints
     public class PetsController : ControllerBase
     {
         private readonly IPetService _petService;
         private readonly IWebHostEnvironment _env;
+        private readonly IPetPhotoService _petPhotocervice;
 
-        public PetsController(IWebHostEnvironment env, IPetService petService)
+        public PetsController(IWebHostEnvironment env, IPetService petService, IPetPhotoService petPhotocervice)
         {
             _env = env;
             _petService = petService;
+            _petPhotocervice = petPhotocervice;
         }
 
         /// <summary>
@@ -75,29 +73,41 @@ namespace PetAdoption.Api.Controllers
 
             var savedFilePaths = new List<string>();
             var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads/pets");
-            // Directory.CreateDirectory(uploadsFolder);
 
-            foreach (var Image in request.Images)
+            foreach (var image in request.Images)
             {
-                //var base64Data = Image.Substring(Image.IndexOf(',') + 1);
-                //byte[] fileBytes = Convert.FromBase64String(base64Data);
+                try
+                {
+                    // Remove data URL prefix if present
+                    var base64Data = image.Base64Data;
+                    var base64Index = base64Data.IndexOf("base64,");
+                    if (base64Index >= 0)
+                    {
+                        base64Data = base64Data.Substring(base64Index + 7);
+                    }
 
+                    var imageBytes = Convert.FromBase64String(base64Data);
 
+                    // Generate a unique filename
+                    var fileExt = Path.GetExtension(image.FileName);
+                    var fileName = $"{Guid.NewGuid()}{fileExt}";
+                    var filePath = Path.Combine(uploadsFolder, fileName);
 
+                    await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
 
-                //var filePath = Path.Combine(uploadsFolder, file.FileName);
-
-                //using var stream = new FileStream(filePath, FileMode.Create);
-                //await file.CopyToAsync(stream);
-
-                //// Save relative path like "uploads/pets/filename.pdf"
-                //var relativePath = Path.Combine("uploads/pets", file.FileName).Replace("\\", "/");
-                //savedFilePaths.Add(relativePath);
+                    // Store relative path for DB (e.g. "uploads/pets/abc.jpg")
+                    var relativePath = Path.Combine("uploads", "pets", fileName).Replace("\\", "/");
+                    savedFilePaths.Add(relativePath);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Images not valid");
+                }
             }
 
             if (savedFilePaths.Any())
             {
-                await _petService.SavePetPhotosAsync(request.PetId, savedFilePaths);
+                await _petPhotocervice.SavePetPhotosAsync(request.PetId, savedFilePaths);
             }
 
             return Ok(savedFilePaths); // return list of saved file paths
@@ -139,8 +149,28 @@ namespace PetAdoption.Api.Controllers
         [HttpDelete("DeletePhoto/{id}")]
         public async Task<IActionResult> DeletePetPhoto(int id)
         {
-            await _petService.DeletePetPhotoAsync(id);
+            if (id <= 0)
+            {
+                return BadRequest("Id is invalid");
+            }
+
+            var exitingPhoto = await _petPhotocervice.GetAsync(x => x.Id == id);
+
+            if (exitingPhoto != null)
+            {
+                var filePath = Path.Combine(_env.WebRootPath, exitingPhoto.PhotoUrl);
+
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+            }
+
+            await _petPhotocervice.DeletePetPhotoAsync(id);
             return NoContent();
         }
     }
+
+    public record PetFilesUploadRequest(int PetId, List<string> Images);
+
+    public record Base64ImageFile(string FileName, string Base64Data);
+    public record Base64UploadRequest(int PetId, List<Base64ImageFile> Images);
 }

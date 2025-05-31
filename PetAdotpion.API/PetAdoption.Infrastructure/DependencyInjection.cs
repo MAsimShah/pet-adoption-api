@@ -23,6 +23,7 @@ namespace PetAdoption.Infrastructure
             
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<IPetRepository, PetRepository>();
+            services.AddTransient<IPetPhotoRepository, PetPhotoRepository>();
 
             return services;
         }
