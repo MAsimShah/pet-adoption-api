@@ -38,7 +38,7 @@ namespace PetAdoption.Domain
 
        // public string UserId { get; set; }
 
-        public virtual PetPhoto PetPhotos { get; set; }
+        public virtual List<PetPhoto> PetPhotos { get; set; }
     }
 
     public enum AnimalGender
