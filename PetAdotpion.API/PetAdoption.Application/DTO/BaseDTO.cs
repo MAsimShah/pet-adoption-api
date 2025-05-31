@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PetAdoption.Domain
+﻿namespace PetAdoption.Application.DTO
 {
-    public abstract class BaseEntity
+    public class BaseDTO
     {
-        [Key]
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
