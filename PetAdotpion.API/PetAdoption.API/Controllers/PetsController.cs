@@ -1,9 +1,7 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PetAdoption.Api.Controllers
 {
@@ -65,6 +63,12 @@ namespace PetAdoption.Api.Controllers
             return Ok(petDto);
         }
 
+        /// <summary>
+        /// Upload pets photos
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [HttpPost("Upload-pet-files")]
         public async Task<IActionResult> SaveFileAsync([FromBody] Base64UploadRequest request)
         {
@@ -122,7 +126,7 @@ namespace PetAdoption.Api.Controllers
         [HttpPut("Update")]
         public async Task<IActionResult> UpdatePet([FromBody] PetDto petDto)
         {
-            if (petDto is null && petDto.Id <= 0)
+            if (petDto is null || petDto.Id <= 0)
                 return BadRequest("Pet ID is invalid for update record");
 
             petDto = await _petService.UpdatePetAsync(petDto);
