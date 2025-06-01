@@ -13,9 +13,5 @@ namespace PetAdoption.Application.Interfaces
         Task<PetDto> UpdatePetAsync(PetDto petDto);
 
         Task DeletePetAsync(int id);
-
-        Task DeletePetPhotoAsync(int id);
-
-        Task SavePetPhotosAsync(int petId, List<string> filePaths);
     }
 }

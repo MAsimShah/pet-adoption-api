@@ -13,12 +13,14 @@ namespace PetAdoption.Application
             #region services
 
             services.AddScoped<IPetService, PetService>();
+            services.AddScoped<IPetPhotoService, PetPhotoService>();
 
             #endregion services
 
             #region Mappings
 
             services.AddAutoMapper(typeof(PetMap));
+            services.AddAutoMapper(typeof(PetPhotoMap));
 
             #endregion Mappings
 

@@ -23,29 +23,13 @@ namespace PetAdoption.Application.Services
             var pets = await _petRepository.GetAllPetsAsync(x => x.IsActive == false);
             var petDtos = _mapper.Map<IEnumerable<PetDto>>(pets);
 
-            //if (pets != null && pets.Any(x => x.PetPhotos != null && x.PetPhotos.Any()))
-            //{
-            //    foreach(var pet in pets)
-            //    {
-            //        petDtos.First(x => x.Id == pet.Id).PhotoUrls = pet.PetPhotos != null && pet.PetPhotos.Any() ? pet.PetPhotos.Select(x => x.PhotoUrl).ToList() : null;
-            //    }
-            //}
-
             return petDtos;
         }
 
         public async Task<PetDto?> GetPetByIdAsync(int id)
         {
-            var pet = await _petRepository.GetAsync(x => x.Id == id);
-
-            var dto = _mapper.Map<PetDto>(pet);
-
-            //if (pet.PetPhotos != null && pet.PetPhotos.Any())
-            //{
-            //    dto.PhotoUrls = new List<string>();
-            //    dto.PhotoUrls = pet.PetPhotos.Select(x => x.PhotoUrl).ToList();
-            //}
-            return dto;
+            Pet pet = await _petRepository.GetAsync(x => x.Id == id);
+            return _mapper.Map<PetDto>(pet);
         }
 
         public async Task<PetDto> AddPetAsync(PetDto petDto)
@@ -56,7 +40,7 @@ namespace PetAdoption.Application.Services
 
             petDto.Id = pet.Id;
 
-            return petDto; 
+            return petDto;
         }
 
         public async Task<PetDto> UpdatePetAsync(PetDto petDto)
@@ -71,24 +55,6 @@ namespace PetAdoption.Application.Services
         public async Task DeletePetAsync(int id)
         {
             await _petRepository.DeletePetAsync(id);
-        }
-
-        public async Task DeletePetPhotoAsync(int id)
-        {
-            await _petRepository.DeletePetPhotoAsync(id);
-        }
-
-
-        public async Task SavePetPhotosAsync(int petId, List<string> filePaths)
-        {
-            var petFileEntities = filePaths.Select(path => new PetPhoto
-            {
-                PetId = petId,
-                PhotoUrl = path,
-                CreatedAt = DateTime.UtcNow
-            }).ToList();
-
-            await _petRepository.SavePetPhotosAsync(petFileEntities);
         }
     }
 }
