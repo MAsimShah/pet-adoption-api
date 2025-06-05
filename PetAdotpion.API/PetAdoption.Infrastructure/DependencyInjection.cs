@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PetAdoption.Application.Interfaces.InfrastructureInterfaces;
+using PetAdoption.Domain;
 using PetAdoption.Infrastructure.DbContextApp;
 using PetAdoption.Infrastructure.Interfaces;
 using PetAdoption.Infrastructure.Repositories;
@@ -17,11 +18,13 @@ namespace PetAdoption.Infrastructure
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             // identity configure
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentityCore<User>()
+                .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
             
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddTransient<IAuthRepository, AuthRepository>();
             services.AddTransient<IPetRepository, PetRepository>();
             services.AddTransient<IPetPhotoRepository, PetPhotoRepository>();
 
