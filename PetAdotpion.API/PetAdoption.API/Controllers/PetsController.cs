@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
@@ -7,7 +8,7 @@ namespace PetAdoption.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize] // 👈 Require authentication for all endpoints
+    [Authorize] // 👈 Require authentication for all endpoints
     public class PetsController : ControllerBase
     {
         private readonly IPetService _petService;
@@ -26,7 +27,6 @@ namespace PetAdoption.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("get-list")]
-        [AllowAnonymous] // 👈 Allow anyone to view pets
         public async Task<IActionResult> GetAllPets()
         {
             var pets = await _petService.GetAllPetsAsync();
