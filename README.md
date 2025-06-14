@@ -24,10 +24,10 @@ A robust Web API built with **.NET Core 9** using **Clean Architecture**, **JWT 
 
 ## 🧱 Architecture
 
-/PetAdoption.API --> API Layer (Controllers, Middleware, Swagger setup)
-/PetAdoption.Application --> Business Logic (DTOs, Services, Interfaces)
-/PetAdoption.Domain --> Entities, Enums, Domain Logic
-/PetAdoption.Infrastructure --> EF Core, Data Access, Repositories, Identity
+- /PetAdoption.API --> API Layer (Controllers, Middleware, Swagger setup)
+- /PetAdoption.Application --> Business Logic (DTOs, Services, Interfaces)
+- /PetAdoption.Domain --> Entities, Enums, Domain Logic
+- /PetAdoption.Infrastructure --> EF Core, Data Access, Repositories, Identity
 
 ## 🛠️ Technologies Used
 
