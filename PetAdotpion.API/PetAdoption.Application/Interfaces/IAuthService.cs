@@ -10,5 +10,7 @@ namespace PetAdoption.Application.Interfaces
         Task<User> RegisterUserAsync(RegisterDTO model);
 
         Task<TokenResponseDTO> LoginUserAsync(User user);
+
+        Task<bool> CheckUsePassword(User user, string password);
     }
 }

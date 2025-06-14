@@ -29,5 +29,10 @@ namespace PetAdoption.Infrastructure.Repositories
 
             return result != null && result.Succeeded;
         }
+
+        public async Task<bool> CheckExistUsersPassword(User user, string password)
+        {
+            return await _userManager.CheckPasswordAsync(user, password);
+        }
     }
 }
