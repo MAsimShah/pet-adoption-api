@@ -18,7 +18,15 @@ namespace PetAdoption.Infrastructure
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             // identity configure
-            services.AddIdentityCore<User>()
+            services.AddIdentityCore<User>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false; // disables special characters
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 4; // your custom minimum length
+                options.Password.RequiredUniqueChars = 0; // optional: no unique character requirement
+            })
                 .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();

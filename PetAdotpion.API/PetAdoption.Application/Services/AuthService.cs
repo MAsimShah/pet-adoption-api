@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
 using PetAdoption.Application.Interfaces.InfrastructureInterfaces;
@@ -21,9 +20,19 @@ namespace PetAdoption.Application.Services
 
         public async Task<User> RegisterUserAsync(RegisterDTO model)
         {
-            var passwordHash = new PasswordHasher<RegisterDTO>().HashPassword(model, model.Password);
-            var user = new User { UserName = model.Email, Email = model.Email, PasswordHash = passwordHash };
+            User user = new User { UserName = model.Email, Email = model.Email, PasswordHash = model.Password, ProfileImage = model.ProfilePhoto };
+
             return await _authRepository.RegisterUserAsync(user);
+        }
+
+        public async Task<bool> CheckUsePassword(User user, string password)
+        {
+            if (user != null && !string.IsNullOrEmpty(password))
+            {
+                return await _authRepository.CheckExistUsersPassword(user, password);
+            }
+
+            return false;
         }
 
         public async Task<TokenResponseDTO> LoginUserAsync(User user)

@@ -10,5 +10,7 @@ namespace PetAdoption.Application.Interfaces.InfrastructureInterfaces
         Task<User> GetAsync(Expression<Func<User, bool>> predicate);
 
         Task<bool> UpdateUserAsync(User user);
+
+        Task<bool> CheckExistUsersPassword(User user, string password);
     }
 }
