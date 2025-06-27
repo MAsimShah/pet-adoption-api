@@ -16,7 +16,7 @@ namespace PetAdoption.API.Controllers
     public class AuthController(IWebHostEnvironment _env, IAuthService _authService) : ControllerBase
     {
         [HttpPost("Register")]
-        public async Task<ActionResult<TokenResponse>> RegisterUser([FromBody] RegisterViewModel model)
+        public async Task<ActionResult<TokenResponseDTO>> RegisterUser([FromBody] RegisterViewModel model)
         {
             try
             {
