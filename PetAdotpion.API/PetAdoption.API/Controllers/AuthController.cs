@@ -84,7 +84,7 @@ namespace PetAdoption.API.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<TokenResponseDTO>> LoginUser(RegisterViewModel model)
+        public async Task<ActionResult<TokenResponseDTO>> LoginUser(LoginViewModel model)
         {
             try
             {
@@ -116,6 +116,4 @@ namespace PetAdoption.API.Controllers
             }
         }
     }
-
-    public record TokenResponse(string? RefreshToken, DateTime? RefreshTokenExpiryTime);
 }
