@@ -84,7 +84,7 @@ namespace PetAdoption.API.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<TokenResponseDTO>> LoginUser(LoginViewModel model)
+        public async Task<ActionResult<TokenResponseDTO>> LoginUser([FromBody] LoginViewModel model)
         {
             try
             {
