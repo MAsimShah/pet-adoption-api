@@ -1,11 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetAdoption.API.Models;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
-using PetAdoption.Application.Services;
 using PetAdoption.Domain;
 
 namespace PetAdoption.API.Controllers
@@ -20,10 +17,11 @@ namespace PetAdoption.API.Controllers
         {
             try
             {
+                if (model is null || model.Email is null || string.IsNullOrEmpty(model.Password))
+                    return BadRequest("Email and Password are required.");
+
                 if (await _authService.GetUser(x => x.Email == model.Email) != null)
-                {
                     return BadRequest($"User is already exist against {model.Email}");
-                }
 
                 string fileName = null;
                 var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads/users");
@@ -88,6 +86,9 @@ namespace PetAdoption.API.Controllers
         {
             try
             {
+                if (model is null || model.Email is null || string.IsNullOrEmpty(model.Password))
+                    return BadRequest("Email and Password are required.");
+
                 User user = await _authService.GetUser(x => x.Email == model.Email);
                 if (user == null)
                 {
@@ -114,6 +115,23 @@ namespace PetAdoption.API.Controllers
             {
                 return BadRequest("User not successful login. Please try again! Kidnly check your email and name.");
             }
+        }
+
+        [HttpPost("RefreshToken")]
+        public async Task<ActionResult<TokenResponseDTO>> Refresh(string refreshToken)
+        {
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest(new { Message = "Refresh token is required." });
+
+            var user = await _authService.GetUser(u => u.RefreshToken == refreshToken);
+
+            if (user == null)
+                return Unauthorized(new { Message = "Invalid refresh token." });
+
+            if (user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+                return Unauthorized(new { Message = "Refresh token has expired." });
+
+            return await _authService.RegenrateToken(user);
         }
     }
 }

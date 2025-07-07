@@ -46,6 +46,17 @@ namespace PetAdoption.Application.Services
             return new TokenResponseDTO() { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
+        public async Task<TokenResponseDTO> RegenrateToken(User user)
+        {
+            if (user == null)
+                return null;
+
+            string accessToken = GenerateJwtToken(user);
+            string refreshToken = await GenerateAndSaveTokens(user);
+
+            return new TokenResponseDTO() { AccessToken = accessToken, RefreshToken = refreshToken };
+        }
+
         private string GenerateJwtToken(User user)
         {
             var claims = new List<Claim>()
