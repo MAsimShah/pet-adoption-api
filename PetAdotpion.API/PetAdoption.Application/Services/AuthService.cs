@@ -63,6 +63,7 @@ namespace PetAdoption.Application.Services
             {
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User"),
                 new Claim("ProfileImage", string.IsNullOrEmpty(user.ProfileImage) ? "" : $"uploads/users/{user.ProfileImage}")
             };
 

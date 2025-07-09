@@ -32,7 +32,8 @@ namespace PetAdoption.Infrastructure.DbContextApp
                     EmailConfirmed = true,
                     PasswordHash = passwordHash,
                     SecurityStamp = "STATIC_SECURITY_STAMP", // Must be static too
-                    ConcurrencyStamp = "STATIC_CONCURRENCY_STAMP" // Must be static
+                    ConcurrencyStamp = "STATIC_CONCURRENCY_STAMP", // Must be static,
+                    IsAdmin = true,
                 }
             );
 
