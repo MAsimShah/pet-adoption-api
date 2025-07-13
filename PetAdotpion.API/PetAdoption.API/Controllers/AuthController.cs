@@ -23,7 +23,7 @@ namespace PetAdoption.API.Controllers
                 if (await _authService.GetUser(x => x.Email == model.Email) != null)
                     return BadRequest($"User is already exist against {model.Email}");
 
-                string fileName = null;
+                string fileName = "";
                 var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads/users");
 
                 if (model.ProfilePhoto != null)
