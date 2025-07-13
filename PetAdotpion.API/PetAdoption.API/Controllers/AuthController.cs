@@ -118,7 +118,7 @@ namespace PetAdoption.API.Controllers
         }
 
         [HttpPost("RefreshToken")]
-        public async Task<ActionResult<TokenResponseDTO>> Refresh(string refreshToken)
+        public async Task<ActionResult<TokenResponseDTO>> Refresh([FromBody] string refreshToken)
         {
             if (string.IsNullOrEmpty(refreshToken))
                 return BadRequest(new { Message = "Refresh token is required." });

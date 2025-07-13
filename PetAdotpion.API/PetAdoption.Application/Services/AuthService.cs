@@ -62,7 +62,9 @@ namespace PetAdoption.Application.Services
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User"),
+                new Claim("ProfileImage", string.IsNullOrEmpty(user.ProfileImage) ? "" : $"uploads/users/{user.ProfileImage}")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSetting.Token!));
