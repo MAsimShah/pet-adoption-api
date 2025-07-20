@@ -27,7 +27,5 @@ namespace PetAdoption.Application.DTO
         public decimal? AdoptionFee { get; set; } = 0;
         public DateTime? AdoptableSince { get; set; }
         public string? Location { get; set; }
-
-        public List<PetPhotoDTO> PetPhotos { get; set; } = new List<PetPhotoDTO>();
     }
 }
