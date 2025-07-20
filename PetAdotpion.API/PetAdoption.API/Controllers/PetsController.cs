@@ -142,7 +142,7 @@ namespace PetAdoption.Api.Controllers
         public async Task<IActionResult> DeletePet(int id)
         {
             await _petService.DeletePetAsync(id);
-            return NoContent();
+            return Ok();
         }
 
         /// <summary>
