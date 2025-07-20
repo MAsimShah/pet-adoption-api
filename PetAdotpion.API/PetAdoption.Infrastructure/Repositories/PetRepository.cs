@@ -7,10 +7,8 @@ using System.Linq.Expressions;
 
 namespace PetAdoption.Infrastructure.Repositories
 {
-    public class PetRepository(IGenericRepository<Pet> petRepo) : IPetRepository
+    public class PetRepository(IGenericRepository<Pet> _petRepo, IGenericRepository<PetPhoto> petPhotoRepo) : IPetRepository
     {
-        private readonly IGenericRepository<Pet> _petRepo = petRepo;
-
         public async Task<IEnumerable<Pet>> GetAllPetsAsync(Expression<Func<Pet, bool>> predicate)
         {
             return await _petRepo.ListAsync(predicate, a => a.PetPhotos);
@@ -37,6 +35,14 @@ namespace PetAdoption.Infrastructure.Repositories
             var pet = await _petRepo.GetAsync(x => x.Id == id);
             if (pet != null)
             {
+                await petPhotoRepo.ListAsync(x => x.PetId == id).ContinueWith(async photos =>
+                {
+                    if (photos.Result.Any())
+                    {
+                        petPhotoRepo.DeleteRange(photos.Result);
+                    }
+                });
+
                 await _petRepo.DeleteWithSaveAsync(pet);
             }
         }
