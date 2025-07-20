@@ -31,7 +31,6 @@ namespace PetAdoption.Domain
         public bool Microchipped { get; set; } = false;
         public bool GoodWithKids { get; set; } = false;
         public bool GoodWithOtherPets { get; set; } = false;
-        public bool IsActive { get; set; } = false;
         public decimal? AdoptionFee { get; set; } = 0;
         public DateTime? AdoptableSince { get; set; }
         public string? Location { get; set; }

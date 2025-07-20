@@ -11,6 +11,7 @@ namespace PetAdoption.Infrastructure.DbContextApp
 
         // Pets Table
         public DbSet<Pet> Pets { get; set; }
+        public DbSet<PetRequest> PetRequests { get; set; }
         public DbSet<PetPhoto> PetPhotos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -35,6 +35,7 @@ namespace PetAdoption.Infrastructure
             services.AddTransient<IAuthRepository, AuthRepository>();
             services.AddTransient<IPetRepository, PetRepository>();
             services.AddTransient<IPetPhotoRepository, PetPhotoRepository>();
+            services.AddTransient<IPetRequestRepository, PetRequestRepository>();
 
             return services;
         }

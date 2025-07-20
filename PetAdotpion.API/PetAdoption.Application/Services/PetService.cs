@@ -20,7 +20,7 @@ namespace PetAdoption.Application.Services
 
         public async Task<IEnumerable<PetDto>> GetAllPetsAsync()
         {
-            var pets = await _petRepository.GetAllPetsAsync(x => x.IsActive == false);
+            var pets = await _petRepository.GetAllPetsAsync();
             var petDtos = _mapper.Map<IEnumerable<PetDto>>(pets);
 
             return petDtos;

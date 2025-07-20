@@ -9,7 +9,7 @@ namespace PetAdoption.Infrastructure.Repositories
 {
     public class PetRepository(IGenericRepository<Pet> _petRepo, IGenericRepository<PetPhoto> petPhotoRepo) : IPetRepository
     {
-        public async Task<IEnumerable<Pet>> GetAllPetsAsync(Expression<Func<Pet, bool>> predicate)
+        public async Task<IEnumerable<Pet>> GetAllPetsAsync(Expression<Func<Pet, bool>> predicate = null)
         {
             return await _petRepo.ListAsync(predicate, a => a.PetPhotos);
         }
