@@ -57,18 +57,6 @@ namespace PetAdoption.Domain
         Other
     }
 
-    public enum WeightCategory
-    {
-        [Description("Small ( < 15kg)")]
-        Small,  // For pets less than 15kg
-
-        [Description("Medium (15 - 30kg)")]
-        Medium, // For pets between 15-30kg
-
-        [Description("Large ( > 30kg)")]
-        Large   // For pets above 30kg
-    }
-
     public enum AnimalColor
     {
         Black,
