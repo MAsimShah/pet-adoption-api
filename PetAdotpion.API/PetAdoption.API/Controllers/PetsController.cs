@@ -169,7 +169,7 @@ namespace PetAdoption.Api.Controllers
             }
 
             await _petPhotocervice.DeletePetPhotoAsync(id);
-            return NoContent();
+            return Ok();
         }
     }
 

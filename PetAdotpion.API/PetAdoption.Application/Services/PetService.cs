@@ -29,7 +29,9 @@ namespace PetAdoption.Application.Services
         public async Task<PetDto?> GetPetByIdAsync(int id)
         {
             Pet pet = await _petRepository.GetAsync(x => x.Id == id);
-            return _mapper.Map<PetDto>(pet);
+            PetDto dto = _mapper.Map<PetDto>(pet);
+
+            return dto;
         }
 
         public async Task<PetDto> AddPetAsync(PetDto petDto)

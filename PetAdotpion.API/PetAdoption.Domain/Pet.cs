@@ -44,7 +44,7 @@ namespace PetAdoption.Domain
     public enum AnimalGender
     {
         Male = 1,
-        Femlae = 2
+        Female = 2
     }
 
     public enum Species
