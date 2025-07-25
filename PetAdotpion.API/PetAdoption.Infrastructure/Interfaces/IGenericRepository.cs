@@ -34,7 +34,7 @@ namespace PetAdoption.Infrastructure.Interfaces
 
         Task<T> GetAsync(Expression<Func<T, bool>> predicate, List<string> thenIncludes, params Expression<Func<T, object>>[] includes);
 
-        Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+        Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includes);
 
         Task<int> Count(Expression<Func<T, bool>> predicate = null);
     }

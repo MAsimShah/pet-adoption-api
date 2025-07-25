@@ -18,6 +18,7 @@ namespace PetAdoption.Application
 
             services.AddScoped<IPetService, PetService>();
             services.AddScoped<IPetPhotoService, PetPhotoService>();
+            services.AddScoped<IPetRequestService, PetRequestService>();
             services.AddScoped<IAuthService, AuthService>();
 
             #endregion services
@@ -26,6 +27,7 @@ namespace PetAdoption.Application
 
             services.AddAutoMapper(typeof(PetMap));
             services.AddAutoMapper(typeof(PetPhotoMap));
+            services.AddAutoMapper(typeof(PetRequestMap));
 
             #endregion Mappings
 

@@ -31,7 +31,6 @@ namespace PetAdoption.Domain
         public bool Microchipped { get; set; } = false;
         public bool GoodWithKids { get; set; } = false;
         public bool GoodWithOtherPets { get; set; } = false;
-        public bool IsActive { get; set; } = false;
         public decimal? AdoptionFee { get; set; } = 0;
         public DateTime? AdoptableSince { get; set; }
         public string? Location { get; set; }
@@ -44,7 +43,7 @@ namespace PetAdoption.Domain
     public enum AnimalGender
     {
         Male = 1,
-        Femlae = 2
+        Female = 2
     }
 
     public enum Species

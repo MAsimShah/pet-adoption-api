@@ -5,7 +5,7 @@ namespace PetAdoption.Application.Interfaces.InfrastructureInterfaces
 {
     public interface IPetRepository
     {
-        Task<IEnumerable<Pet>> GetAllPetsAsync(Expression<Func<Pet, bool>> predicate);
+        Task<IEnumerable<Pet>> GetAllPetsAsync(Expression<Func<Pet, bool>> predicate = null);
 
         Task AddPetAsync(Pet pet);
 

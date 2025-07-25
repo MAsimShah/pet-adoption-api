@@ -219,7 +219,7 @@ namespace PetAdoption.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        public async Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includes)
         {
             try
             {
