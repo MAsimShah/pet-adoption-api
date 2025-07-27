@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces.InfrastructureInterfaces;
 using PetAdoption.Domain;
 using PetAdoption.Infrastructure.Interfaces;
@@ -17,6 +18,22 @@ namespace PetAdoption.Infrastructure.Repositories
         public async Task<Pet?> GetPetByIdAsync(int id)
         {
             return await _petRepo.GetAsync(x => x.Id == id);
+        }
+
+        public async Task<IEnumerable<DropdownDTO>> GetDropdownAsync(Expression<Func<Pet, bool>> predicate = null)
+        {
+            var list = await _petRepo.ListAsync(predicate);
+
+            if (list == null || !list.Any())
+            {
+                return Enumerable.Empty<DropdownDTO>();
+            }
+
+            return list.Select(x => new DropdownDTO()
+            {
+                Id = x.Id,
+                Name = $"{x.Name} - {x.Breed}"
+            });
         }
 
         public async Task AddPetAsync(Pet pet)
