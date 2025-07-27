@@ -8,6 +8,8 @@ namespace PetAdoption.Application.Interfaces
 
         Task<PetDto?> GetPetByIdAsync(int id);
 
+        Task<IEnumerable<DropdownDTO>> GetDropdownAsync();
+
         Task<PetDto> AddPetAsync(PetDto petDto);
 
         Task<PetDto> UpdatePetAsync(PetDto petDto);

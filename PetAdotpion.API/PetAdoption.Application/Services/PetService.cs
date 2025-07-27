@@ -26,6 +26,11 @@ namespace PetAdoption.Application.Services
             return petDtos;
         }
 
+        public async Task<IEnumerable<DropdownDTO>> GetDropdownAsync()
+        {
+            return await _petRepository.GetDropdownAsync();
+        }
+
         public async Task<PetDto?> GetPetByIdAsync(int id)
         {
             Pet pet = await _petRepository.GetAsync(x => x.Id == id);

@@ -49,6 +49,17 @@ namespace PetAdoption.Api.Controllers
         }
 
         /// <summary>
+        /// Get all pets info in dropdown
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("dropdown")]
+        public async Task<IActionResult> GetPetsDropdown()
+        {
+            var dropdownList = await _petService.GetDropdownAsync();
+            return Ok(dropdownList);
+        }
+
+        /// <summary>
         /// Add a New Pet
         /// </summary>
         /// <param name="petDto"></param>

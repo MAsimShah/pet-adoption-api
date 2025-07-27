@@ -1,19 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetAdoption.Application.DTO;
 using PetAdoption.Infrastructure.DbContextApp;
 using PetAdoption.Infrastructure.Interfaces;
 using System.Linq.Expressions;
 
 namespace PetAdoption.Infrastructure.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T>(AppDbContext dBContext) : IGenericRepository<T> where T : class
     {
-        private readonly AppDbContext dBContext;
-
-        public GenericRepository(AppDbContext dbContext)
-        {
-            this.dBContext = dbContext;
-        }
-
         public async Task SaveAsync()
         {
             try
