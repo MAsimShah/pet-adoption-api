@@ -6,7 +6,7 @@ namespace PetAdoption.Application.DTO
     {
         public int PetId { get; set; }
         public string PetName { get; set; } 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string UserName { get; set; }
 
         public DateTime RequestDate { get; set; } = DateTime.Now;
