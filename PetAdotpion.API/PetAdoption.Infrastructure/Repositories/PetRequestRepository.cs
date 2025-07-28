@@ -19,8 +19,7 @@ namespace PetAdoption.Infrastructure.Repositories
 
         public async Task AddRequestAsync(PetRequest request)
         {
-            await _requestRepo.AddAsync(request);
-            await _requestRepo.SaveAsync();
+            await _requestRepo.AddWithSaveAsync(request);
         }
 
         public async Task UpdateRequestAsync(PetRequest request)

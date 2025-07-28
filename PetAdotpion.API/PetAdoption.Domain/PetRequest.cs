@@ -1,9 +1,14 @@
-﻿namespace PetAdoption.Domain
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PetAdoption.Domain
 {
     public class PetRequest : BaseEntity
     {
+        [ForeignKey("Pet")]
         public int PetId { get; set; }         // FK to Pet
-        public int UserId { get; set; }        // FK to User making the request
+        
+        [ForeignKey("User")]
+        public string UserId { get; set; }        // FK to User making the request
 
         public DateTime RequestDate { get; set; } = DateTime.Now;
 
@@ -12,8 +17,8 @@
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
 
         // Navigation properties (optional if using EF Core)
-        public Pet Pet { get; set; }
-        public User User { get; set; }
+        public virtual Pet Pet { get; set; }
+        public virtual User User { get; set; }
     }
 
     public enum RequestStatus

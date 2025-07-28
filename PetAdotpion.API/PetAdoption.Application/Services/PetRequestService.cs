@@ -26,7 +26,7 @@ namespace PetAdoption.Application.Services
 
         public async Task<PetRequestDTO> AddRequestAsync(PetRequestDTO requestDto)
         {
-            var request = _mapper.Map<PetRequest>(requestDto);
+            PetRequest? request = _mapper.Map<PetRequest>(requestDto);
 
             await _requestRepository.AddRequestAsync(request);
 
