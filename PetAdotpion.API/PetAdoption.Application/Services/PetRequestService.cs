@@ -8,9 +8,9 @@ namespace PetAdoption.Application.Services
 {
     public class PetRequestService(IMapper _mapper, IPetRequestRepository _requestRepository) : IPetRequestService
     {
-        public async Task<IEnumerable<PetRequestDTO>> GetAllRequestsAsync()
+        public async Task<IEnumerable<PetRequestDTO>> GetAllRequestsAsync(string userId = "")
         {
-            var requests = await _requestRepository.GetAllRequestsAsync();
+            var requests = string.IsNullOrEmpty(userId) ? await _requestRepository.GetAllRequestsAsync() : await _requestRepository.GetAllRequestsAsync(x => x.UserId == userId);
             var petDtos = _mapper.Map<IEnumerable<PetRequestDTO>>(requests);
 
             return petDtos;

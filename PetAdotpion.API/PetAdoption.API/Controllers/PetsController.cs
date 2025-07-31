@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using PetAdoption.API.Interfaces;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
+using System.Security.Claims;
 
 namespace PetAdoption.Api.Controllers
 {
@@ -14,12 +17,14 @@ namespace PetAdoption.Api.Controllers
         private readonly IPetService _petService;
         private readonly IWebHostEnvironment _env;
         private readonly IPetPhotoService _petPhotocervice;
+        private readonly IUserContextService _userContext;
 
-        public PetsController(IWebHostEnvironment env, IPetService petService, IPetPhotoService petPhotocervice)
+        public PetsController(IWebHostEnvironment env, IPetService petService, IPetPhotoService petPhotocervice, IUserContextService userContext)
         {
             _env = env;
             _petService = petService;
             _petPhotocervice = petPhotocervice;
+            _userContext = userContext;
         }
 
         /// <summary>
@@ -29,7 +34,9 @@ namespace PetAdoption.Api.Controllers
         [HttpGet("get-list")]
         public async Task<IActionResult> GetAllPets()
         {
-            var pets = await _petService.GetAllPetsAsync();
+            var userId = _userContext.UserId;
+
+            var pets = await _petService.GetAllPetsAsync(userId);
             return Ok(pets);
         }
 

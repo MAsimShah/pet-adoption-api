@@ -4,7 +4,7 @@ namespace PetAdoption.Application.Interfaces
 {
     public interface IPetService
     {
-        Task<IEnumerable<PetDto>> GetAllPetsAsync();
+        Task<IEnumerable<PetDto>> GetAllPetsAsync(string userId = "");
 
         Task<PetDto?> GetPetByIdAsync(int id);
 
