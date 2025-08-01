@@ -5,10 +5,10 @@ namespace PetAdoption.Domain
     public class PetRequest : BaseEntity
     {
         [ForeignKey("Pet")]
-        public int PetId { get; set; }         // FK to Pet
+        public int? PetId { get; set; }         // FK to Pet
         
         [ForeignKey("User")]
-        public string UserId { get; set; }        // FK to User making the request
+        public string? UserId { get; set; }        // FK to User making the request
 
         public DateTime RequestDate { get; set; } = DateTime.Now;
 

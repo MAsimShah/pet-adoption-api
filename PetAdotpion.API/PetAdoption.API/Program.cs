@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PetAdoption.API.Interfaces;
+using PetAdoption.API.Services;
 using PetAdoption.Application;
 using PetAdoption.Infrastructure;
 using System.Text;
@@ -69,6 +71,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 // Register Service
 builder.Services.AddApplicationServices(builder.Configuration);

@@ -1,6 +1,7 @@
 ﻿using PetAdoption.Domain;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetAdoption.Domain
 {
@@ -35,8 +36,10 @@ namespace PetAdoption.Domain
         public DateTime? AdoptableSince { get; set; }
         public string? Location { get; set; }
 
-       // public string UserId { get; set; }
+        [ForeignKey("User")]
+        public string? UserId { get; set; }
 
+        public virtual User User { get; set; }
         public virtual List<PetPhoto> PetPhotos { get; set; }
     }
 

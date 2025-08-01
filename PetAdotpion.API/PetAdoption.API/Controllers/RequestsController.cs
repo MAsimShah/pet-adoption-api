@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetAdoption.API.Interfaces;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
 
@@ -8,7 +9,7 @@ namespace PetAdoption.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize] // 👈 Require authentication for all endpoints
-    public class RequestsController(IPetRequestService _requestRepo) : ControllerBase
+    public class RequestsController(IPetRequestService _requestRepo, IUserContextService _userContext) : ControllerBase
     {
         /// <summary>
         /// Get all pets requests
@@ -17,7 +18,8 @@ namespace PetAdoption.API.Controllers
         [HttpGet("get-list")]
         public async Task<IActionResult> GetAllPets()
         {
-            var requests = await _requestRepo.GetAllRequestsAsync();
+            var userId = _userContext.UserId;
+            var requests = await _requestRepo.GetAllRequestsAsync(userId);
             return Ok(requests);
         }
 
