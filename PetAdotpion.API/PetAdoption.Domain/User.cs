@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Reflection;
 
 namespace PetAdoption.Domain
 {

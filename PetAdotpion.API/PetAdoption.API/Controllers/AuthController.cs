@@ -53,24 +53,18 @@ namespace PetAdoption.API.Controllers
                     }
                 }
 
-                User user = await _authService.RegisterUserAsync(new RegisterDTO()
+                TokenResponseDTO tokens = await _authService.RegisterUserAsync(new RegisterDTO()
                 {
                     Email = model.Email,
                     Name = model.Name,
                     Password = model.Password,
-                    ProfilePhoto = fileName
+                    ProfilePhoto = fileName,
+                    PhoneNumber = model.PhoneNumber
                 });
-
-                if (user is null)
-                {
-                    return BadRequest("User not successful Register. Please try again!");
-                }
-
-                TokenResponseDTO tokens = await _authService.LoginUserAsync(user);
 
                 if (tokens == null)
                 {
-                    return BadRequest("Somthing error occur");
+                    return BadRequest("Token not generated");
                 }
 
                 return Ok(tokens);
@@ -132,6 +126,85 @@ namespace PetAdoption.API.Controllers
                 return Unauthorized(new { Message = "Refresh token has expired." });
 
             return await _authService.RegenrateToken(user);
+        }
+
+        [Authorize]
+        [HttpGet("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _authService.GetAllUsersAsync();
+
+            return Ok(users);
+        }
+
+        [Authorize]
+        [HttpPost("Update")]
+        public async Task<ActionResult<TokenResponseDTO>> UpdateUser([FromBody] UserViewModel model)
+        {
+            try
+            {
+                if (model is null || model.Email is null || string.IsNullOrEmpty(model.Password))
+                    return BadRequest("Email and Password are required.");
+
+                var existingUser = await _authService.GetUser(x => x.Email == model.Email && x.Id != model.Id);
+                if (existingUser != null)
+                    return BadRequest($"User is already exist against {model.Email}");
+
+                string fileName = "";
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads/users");
+
+                if (model.ProfilePhoto != null)
+                {
+                    try
+                    {
+                        // Remove data URL prefix if present
+                        var base64Data = model.ProfilePhoto.Base64Data;
+                        var base64Index = base64Data.IndexOf("base64,");
+                        if (base64Index >= 0)
+                        {
+                            base64Data = base64Data.Substring(base64Index + 7);
+                        }
+
+                        var imageBytes = Convert.FromBase64String(base64Data);
+
+                        // Generate a unique filename
+                        var fileExt = Path.GetExtension(model.ProfilePhoto.FileName);
+                        fileName = $"{Guid.NewGuid()}{fileExt}";
+                        var filePath = Path.Combine(uploadsFolder, fileName);
+
+                        await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
+
+                        if (!string.IsNullOrEmpty(existingUser.ProfileImage))
+                        {
+                            // delete previous image delete
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Profile Images not able to process");
+                    }
+                }
+
+                bool isUpdated = await _authService.UpdateUser(new UserDTO()
+                {
+                    Email = model.Email,
+                    Name = model.Name,
+                    Password = model.Password,
+                    ProfilePhoto = fileName,
+                    PhoneNumber = model.PhoneNumber
+                });
+
+                if (!isUpdated)
+                {
+                    return BadRequest("Somthing error occur");
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("User not successful Register. Please try again!");
+            }
         }
     }
 }
