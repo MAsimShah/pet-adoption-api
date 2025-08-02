@@ -5,6 +5,8 @@ namespace PetAdoption.Application.Interfaces.InfrastructureInterfaces
 {
     public interface IAuthRepository
     {
+        Task<List<User>> GetAllUsersAsync();
+
         Task<User> RegisterUserAsync(User user);
 
         Task<User> GetAsync(Expression<Func<User, bool>> predicate);

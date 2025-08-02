@@ -13,16 +13,40 @@ namespace PetAdoption.Application.Services
 {
     public class AuthService(IAuthRepository _authRepository, AppSettingConfiguration _appSetting) : IAuthService
     {
+        public async Task<List<UserDTO>> GetAllUsersAsync()
+        {
+           List<User> users = await _authRepository.GetAllUsersAsync();
+
+            return users.Select(x => new UserDTO()
+            {
+                Id = x.Id,
+                Name = x.UserName,
+                Email = x.Email
+            }).ToList();
+        }
+
         public async Task<User> GetUser(Expression<Func<User, bool>> predicate)
         {
             return await _authRepository.GetAsync(predicate);
         }
 
-        public async Task<User> RegisterUserAsync(RegisterDTO model)
+        public async Task<TokenResponseDTO> RegisterUserAsync(RegisterDTO model)
         {
-            User user = new User { UserName = model.Email, Email = model.Email, PasswordHash = model.Password, ProfileImage = model.ProfilePhoto };
+            User user = new User { UserName = model.Email, Email = model.Email, PasswordHash = model.Password, ProfileImage = model.ProfilePhoto, PhoneNumber = model.PhoneNumber };
 
-            return await _authRepository.RegisterUserAsync(user);
+            user = await _authRepository.RegisterUserAsync(user);
+
+            return await LoginUserAsync(user);
+        }
+
+        public async Task<bool> UpdateUser(UserDTO model)
+        {
+            var exisitingUser = await GetUser(x => x.Email == model.Email && x.Id == model.Id);
+
+            var refreshToken = GenerateRefreshToken();
+            exisitingUser.RefreshToken = refreshToken;
+            exisitingUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
+            return await _authRepository.UpdateUserAsync(exisitingUser);
         }
 
         public async Task<bool> CheckUsePassword(User user, string password)

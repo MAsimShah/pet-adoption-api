@@ -6,9 +6,13 @@ namespace PetAdoption.Application.Interfaces
 {
     public interface IAuthService
     {
+        Task<List<UserDTO>> GetAllUsersAsync();
+
         Task<User> GetUser(Expression<Func<User, bool>> predicate);
 
-        Task<User> RegisterUserAsync(RegisterDTO model);
+        Task<TokenResponseDTO> RegisterUserAsync(RegisterDTO model);
+
+        Task<bool> UpdateUser(UserDTO model);
 
         Task<TokenResponseDTO> LoginUserAsync(User user);
 

@@ -1,4 +1,5 @@
 ﻿using PetAdoption.Api.Controllers;
+using PetAdoption.Domain;
 
 namespace PetAdoption.API.Models
 {
@@ -12,14 +13,11 @@ namespace PetAdoption.API.Models
 
         public string PhoneNumber { get; set; }
 
-        public Gender Gender { get; set; }
-
         public Base64ImageFile? ProfilePhoto { get; set; }
     }
 
-    public enum Gender
+    public class UserViewModel : RegisterViewModel
     {
-        Male = 1,
-        Female = 2
+        public string Id { get; set; }
     }
 }
