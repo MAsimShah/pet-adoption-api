@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
 using PetAdoption.Application.Interfaces.InfrastructureInterfaces;
@@ -11,7 +12,7 @@ using System.Text;
 
 namespace PetAdoption.Application.Services
 {
-    public class AuthService(IAuthRepository _authRepository, AppSettingConfiguration _appSetting) : IAuthService
+    public class AuthService(IAuthRepository _authRepository, AppSettingConfiguration _appSetting, IMapper _mapper) : IAuthService
     {
         public async Task<List<UserDTO>> GetAllUsersAsync()
         {
@@ -30,6 +31,13 @@ namespace PetAdoption.Application.Services
             return await _authRepository.GetAsync(predicate);
         }
 
+        public async Task<UserDTO> GetUserAsync(Expression<Func<User, bool>> predicate)
+        {
+            var user = await _authRepository.GetAsync(predicate);
+            user.PasswordHash = string.Empty; // Clear password hash for security reasons
+            return _mapper.Map<UserDTO>(user);
+        }
+
         public async Task<TokenResponseDTO> RegisterUserAsync(RegisterDTO model)
         {
             User user = new User { UserName = model.Email, Email = model.Email, PasswordHash = model.Password, ProfileImage = model.ProfilePhoto, PhoneNumber = model.PhoneNumber };
@@ -46,7 +54,14 @@ namespace PetAdoption.Application.Services
             var refreshToken = GenerateRefreshToken();
             exisitingUser.RefreshToken = refreshToken;
             exisitingUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
-            return await _authRepository.UpdateUserAsync(exisitingUser);
+            exisitingUser.UserName = model.Name;
+            exisitingUser.Email = model.Email;
+            exisitingUser.PhoneNumber = model.PhoneNumber;
+
+            if (!string.IsNullOrEmpty(model.ProfileImage) || !string.IsNullOrWhiteSpace(model.ProfileImage))
+                exisitingUser.ProfileImage = model.ProfileImage;
+
+            return await _authRepository.UpdateUserAsync(exisitingUser, model.Password);
         }
 
         public async Task<bool> CheckUsePassword(User user, string password)
@@ -89,7 +104,7 @@ namespace PetAdoption.Application.Services
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User"),
-                new Claim("ProfileImage", string.IsNullOrEmpty(user.ProfileImage) ? "" : $"uploads/users/{user.ProfileImage}")
+                new Claim("ProfileImage", string.IsNullOrEmpty(user.ProfileImage) ? "" : (user.ProfileImage.Contains("uploads/users") ? user.ProfileImage : $"uploads/users/{user.ProfileImage}"))
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSetting.Token!));

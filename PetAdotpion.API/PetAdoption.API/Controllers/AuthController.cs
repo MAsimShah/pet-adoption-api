@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetAdoption.API.Models;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
+using PetAdoption.Application.Services;
 using PetAdoption.Domain;
 
 namespace PetAdoption.API.Controllers
@@ -53,12 +54,14 @@ namespace PetAdoption.API.Controllers
                     }
                 }
 
+                var relativePath = Path.Combine("uploads", "users", fileName).Replace("\\", "/");
+
                 TokenResponseDTO tokens = await _authService.RegisterUserAsync(new RegisterDTO()
                 {
                     Email = model.Email,
                     Name = model.Name,
                     Password = model.Password,
-                    ProfilePhoto = fileName,
+                    ProfilePhoto = relativePath,
                     PhoneNumber = model.PhoneNumber
                 });
 
@@ -91,7 +94,7 @@ namespace PetAdoption.API.Controllers
 
                 bool passwordIsValid = await _authService.CheckUsePassword(user, model.Password);
 
-                if (string.IsNullOrEmpty(user.PasswordHash) && passwordIsValid)
+                if (!passwordIsValid)
                 {
                     return BadRequest("Password is not correct");
                 }
@@ -137,8 +140,24 @@ namespace PetAdoption.API.Controllers
             return Ok(users);
         }
 
+
+        /// <summary>
+        /// Get user by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("Get/{id}")]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            UserDTO user = await _authService.GetUserAsync(x => x.Id == id);
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
         [Authorize]
-        [HttpPost("Update")]
+        [HttpPut("Update")]
         public async Task<ActionResult<TokenResponseDTO>> UpdateUser([FromBody] UserViewModel model)
         {
             try
@@ -187,10 +206,11 @@ namespace PetAdoption.API.Controllers
 
                 bool isUpdated = await _authService.UpdateUser(new UserDTO()
                 {
+                    Id = model.Id,
                     Email = model.Email,
                     Name = model.Name,
                     Password = model.Password,
-                    ProfilePhoto = fileName,
+                    ProfileImage = fileName,
                     PhoneNumber = model.PhoneNumber
                 });
 
@@ -199,7 +219,7 @@ namespace PetAdoption.API.Controllers
                     return BadRequest("Somthing error occur");
                 }
 
-                return Ok();
+                return Ok(model);
             }
             catch (Exception ex)
             {

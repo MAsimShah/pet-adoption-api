@@ -6,6 +6,7 @@ using PetAdoption.API.Interfaces;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
 using System.Security.Claims;
+using static PetAdoption.API.Models.RecordModels;
 
 namespace PetAdoption.Api.Controllers
 {
@@ -190,9 +191,4 @@ namespace PetAdoption.Api.Controllers
             return Ok();
         }
     }
-
-    public record PetFilesUploadRequest(int PetId, List<string> Images);
-
-    public record Base64ImageFile(string FileName, string Base64Data);
-    public record Base64UploadRequest(int PetId, List<Base64ImageFile> Images);
 }
