@@ -10,6 +10,8 @@ namespace PetAdoption.Application.Interfaces
 
         Task<User> GetUser(Expression<Func<User, bool>> predicate);
 
+        Task<UserDTO> GetUserAsync(Expression<Func<User, bool>> predicate);
+
         Task<TokenResponseDTO> RegisterUserAsync(RegisterDTO model);
 
         Task<bool> UpdateUser(UserDTO model);

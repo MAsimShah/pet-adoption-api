@@ -28,6 +28,7 @@ namespace PetAdoption.Application
             services.AddAutoMapper(typeof(PetMap));
             services.AddAutoMapper(typeof(PetPhotoMap));
             services.AddAutoMapper(typeof(PetRequestMap));
+            services.AddAutoMapper(typeof(UserMap));
 
             #endregion Mappings
 

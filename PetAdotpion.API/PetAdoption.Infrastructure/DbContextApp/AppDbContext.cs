@@ -19,7 +19,7 @@ namespace PetAdoption.Infrastructure.DbContextApp
             base.OnModelCreating(modelBuilder);
 
             // Hardcoded password hash for password "admin123"
-            const string passwordHash = "AQAAAAEAACcQAAAAEB1ieNgDykRMVBGk+HzMNK62Ryrrg4o7K8H1S4AKDs/AS8WWVQlZp8AwY4sWAnqv5g==";
+            const string passwordHash = "AQAAAAIAAYagAAAAEM6z7+G4p2kRMwRiSvtkpjfPyPdAbSXx1Y9Qpl8MyY+QATJ8tsjwJ2umqrIsyq7atw==";
 
             // Seeding admin user
             modelBuilder.Entity<User>().HasData(

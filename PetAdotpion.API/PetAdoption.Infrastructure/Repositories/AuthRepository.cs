@@ -36,10 +36,15 @@ namespace PetAdoption.Infrastructure.Repositories
             return await _userRepo.GetAsync(predicate);
         }
 
-        public async Task<bool> UpdateUserAsync(User user)
+        public async Task<bool> UpdateUserAsync(User user, string newPassword = "")
         {
-            IdentityResult result = await _userManager.UpdateAsync(user);
+            if (!string.IsNullOrEmpty(newPassword) || !string.IsNullOrWhiteSpace(newPassword))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                IdentityResult? resetPassword = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            }
 
+            IdentityResult result = await _userManager.UpdateAsync(user);
             return result != null && result.Succeeded;
         }
 
