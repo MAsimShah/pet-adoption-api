@@ -22,7 +22,8 @@ namespace PetAdoption.Application.Services
             {
                 Id = x.Id,
                 Name = x.UserName,
-                Email = x.Email
+                Email = x.Email,
+                IsActive = x.IsActive
             }).ToList();
         }
 

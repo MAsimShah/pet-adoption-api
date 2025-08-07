@@ -20,6 +20,7 @@ namespace PetAdoption.Application
             services.AddScoped<IPetPhotoService, PetPhotoService>();
             services.AddScoped<IPetRequestService, PetRequestService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             #endregion services
 
