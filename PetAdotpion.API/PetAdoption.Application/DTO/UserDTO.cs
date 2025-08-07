@@ -19,6 +19,9 @@ namespace PetAdoption.Application.DTO
         public string? ProfileImage { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
+
+
+        public bool IsActive { get; set; }
     }
 
     public record Base64ImageFile(string FileName, string Base64Data);

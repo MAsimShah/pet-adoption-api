@@ -10,5 +10,6 @@ namespace PetAdoption.Domain
         public DateTime? RefreshTokenExpiryTime { get; set; }
 
         public bool IsAdmin { get; set; } = false;
+        public bool IsActive { get; set; } = true;
     }
 }
