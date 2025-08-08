@@ -12,7 +12,7 @@ namespace PetAdoption.Domain
 
         public DateTime RequestDate { get; set; } = DateTime.Now;
 
-        public string Message { get; set; }    // Optional message by user
+        public string? Message { get; set; }    // Optional message by user
 
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
 

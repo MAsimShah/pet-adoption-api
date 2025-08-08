@@ -1,4 +1,5 @@
 ﻿using PetAdoption.Application.DTO;
+using PetAdoption.Domain;
 
 namespace PetAdoption.Application.Interfaces
 {
@@ -8,7 +9,7 @@ namespace PetAdoption.Application.Interfaces
 
         Task<PetDto?> GetPetByIdAsync(int id);
 
-        Task<IEnumerable<DropdownDTO>> GetDropdownAsync();
+        Task<IEnumerable<DropdownDTO>> GetDropdownAsync(string userId, Species? specie = null);
 
         Task<PetDto> AddPetAsync(PetDto petDto);
 

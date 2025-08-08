@@ -32,9 +32,13 @@ namespace PetAdoption.Application.Services
             return petDtos;
         }
 
-        public async Task<IEnumerable<DropdownDTO>> GetDropdownAsync()
+        public async Task<IEnumerable<DropdownDTO>> GetDropdownAsync(string userId, Species? specie = null)
         {
-            return await _petRepository.GetDropdownAsync();
+            if (specie is null)
+                return await _petRepository.GetDropdownAsync(x => x.UserId != userId);
+            else
+                return await _petRepository.GetDropdownAsync(x => x.Species == specie && x.UserId != userId);
+
         }
 
         public async Task<PetDto?> GetPetByIdAsync(int id)
