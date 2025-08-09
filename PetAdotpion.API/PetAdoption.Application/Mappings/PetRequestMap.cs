@@ -14,7 +14,8 @@ namespace PetAdoption.Application.Mappings
 
             CreateMap<PetRequest, PetRequestDTO>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.NormalizedUserName : null))
-                .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet != null ? src.Pet.Name : null));
+                .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet != null ? src.Pet.Name : null))
+                .ForMember(dest => dest.Specie, opt => opt.MapFrom(src => src.Pet != null ? (Species?)src.Pet.Species : null));
         }
     }
 }
