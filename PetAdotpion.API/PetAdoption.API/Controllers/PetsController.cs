@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using PetAdoption.API.Interfaces;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
+using PetAdoption.Domain;
 using System.Security.Claims;
 using static PetAdoption.API.Models.RecordModels;
 
@@ -61,9 +62,10 @@ namespace PetAdoption.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("dropdown")]
-        public async Task<IActionResult> GetPetsDropdown()
+        public async Task<IActionResult> GetPetsDropdown(Species? specie = null)
         {
-            var dropdownList = await _petService.GetDropdownAsync();
+            var userId = _userContext.UserId;
+            var dropdownList = await _petService.GetDropdownAsync(userId, specie);
             return Ok(dropdownList);
         }
 

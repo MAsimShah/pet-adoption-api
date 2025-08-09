@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetAdoption.API.Interfaces;
 using PetAdoption.Application.DTO;
 using PetAdoption.Application.Interfaces;
+using PetAdoption.Domain;
 
 namespace PetAdoption.API.Controllers
 {
@@ -16,10 +17,22 @@ namespace PetAdoption.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("get-list")]
-        public async Task<IActionResult> GetAllPets()
+        public async Task<IActionResult> GetAllRequests()
         {
             var userId = _userContext.UserId;
             var requests = await _requestRepo.GetAllRequestsAsync(userId);
+            return Ok(requests);
+        }
+
+        /// <summary>
+        /// Get all user requests for adopt pets
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getUserRequests")]
+        public async Task<IActionResult> GetUserRequests()
+        {
+            var userId = _userContext.UserId;
+            var requests = await _requestRepo.GetAllUserRequestsAsync(userId);
             return Ok(requests);
         }
 
@@ -29,7 +42,7 @@ namespace PetAdoption.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("Get/{id}")]
-        public async Task<IActionResult> GetPetById(int id)
+        public async Task<IActionResult> GetRequestById(int id)
         {
             var request = await _requestRepo.GetRequestByIdAsync(id);
             if (request == null)
@@ -59,7 +72,7 @@ namespace PetAdoption.API.Controllers
         /// <param name="requestDto"></param>
         /// <returns></returns>
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdatePet([FromBody] PetRequestDTO requestDto)
+        public async Task<IActionResult> UpdateRequest([FromBody] PetRequestDTO requestDto)
         {
             if (requestDto is null || requestDto.Id <= 0)
                 return BadRequest("Pet's Request ID is invalid for update record");
@@ -69,12 +82,29 @@ namespace PetAdoption.API.Controllers
         }
 
         /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="requestId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [HttpPut("UpdateStatus")]
+        public async Task<IActionResult> UpdateRequestStatus([FromQuery] int requestId, [FromQuery] RequestStatus status)
+        {
+            if (requestId <= 0)
+                return BadRequest("Pet's Request ID is invalid for update record");
+
+            var userId = _userContext.UserId;
+            var requestDto = await _requestRepo.UpdateRequestStatusAsync(requestId, userId, status);
+            return Ok(requestDto);
+        }
+
+        /// <summary>
         /// Delete request of pet
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> DeletePet(int id)
+        public async Task<IActionResult> DeleteRequest(int id)
         {
             await _requestRepo.DeleteRequestAsync(id);
             return Ok();
